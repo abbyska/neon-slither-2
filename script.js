@@ -25,7 +25,7 @@ let state = {
     tileCountY: 20,
     tileSize: 0,
     score: 0,
-    gameSpeed: 150, // Default to Beginner
+    gameSpeed: 100, // Default to Beginner
     playerName: '',
     leaderboard: [],
     highScore: 0, // Will load from leaderboard
