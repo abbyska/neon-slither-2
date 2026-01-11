@@ -126,7 +126,10 @@ function init() {
     });
 
     // UI Listeners
-    startScreen.addEventListener('click', startGame);
+    const tapToStartBtn = document.getElementById('tap-to-start');
+    if (tapToStartBtn) {
+        tapToStartBtn.addEventListener('click', startGame);
+    }
     restartBtn.addEventListener('click', startGame);
 
     // Initial Render
