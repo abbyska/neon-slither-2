@@ -587,32 +587,39 @@ h1.title {
 /* Mobile / Compact Screen Adjustments */
 @media (max-width: 600px) {
     .screen {
-        padding-bottom: 120px;
-        /* Force content up above URL bar */
-        justify-content: flex-end;
-        /* Push content up from bottom */
+        padding-top: 40px;
+        padding-bottom: 80px;
+        justify-content: center;
     }
 
     .game-logo {
-        width: 80px;
-        height: 80px;
-        margin-top: 20px;
+        width: 70px;
+        height: 70px;
+        margin-top: 0;
     }
 
     h1.title {
-        font-size: 2rem;
-        margin: 10px 0;
+        font-size: 1.8rem;
+        margin: 5px 0;
+    }
+
+    .theme-container {
+        margin-bottom: 1rem;
+    }
+
+    .difficulty-container {
+        margin-bottom: 1rem;
     }
 
     .instructions {
-        margin-bottom: 10px;
-        font-size: 0.8rem;
+        margin-bottom: 5px;
+        font-size: 0.75rem;
     }
 
     .controls-container {
-        margin-bottom: 20px;
-        padding: 8px 15px;
-        gap: 10px;
+        margin-bottom: 15px;
+        padding: 5px 12px;
+        gap: 8px;
     }
 
     .control-group {
@@ -621,23 +628,18 @@ h1.title {
 
     .icon-desktop,
     .icon-mobile {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         margin-top: 5px;
         margin-bottom: 0px;
-        /* Padding bottom on screen handles clearance */
     }
 
     .identity-box {
-        margin-bottom: 10px;
-        padding: 5px 15px;
-    }
-
-    .difficulty-container {
-        margin-bottom: 15px;
+        margin-bottom: 8px;
+        padding: 4px 12px;
     }
 
     /* HUD mobile spacing */
