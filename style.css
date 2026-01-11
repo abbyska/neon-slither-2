@@ -266,6 +266,7 @@ h1.title {
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s;
+    pointer-events: auto;
 }
 
 .btn-diff.active {
