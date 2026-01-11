@@ -51,6 +51,8 @@ const startNameVal = document.getElementById('start-name');
 const hudNameVal = document.getElementById('hud-name');
 const leaderboardList = document.getElementById('leaderboard-list');
 const difficultyBtns = document.querySelectorAll('.btn-diff');
+const backToMainHud = document.getElementById('back-to-main-hud');
+const backToMainGameOver = document.getElementById('back-to-main-gameover');
 
 // --- Helper Functions ---
 function generateFunnyName() {
@@ -132,10 +134,39 @@ function init() {
     }
     restartBtn.addEventListener('click', startGame);
 
+    // Back to Main Listeners
+    if (backToMainHud) {
+        backToMainHud.addEventListener('click', returnToMain);
+    }
+    if (backToMainGameOver) {
+        backToMainGameOver.addEventListener('click', returnToMain);
+    }
+
     // Initial Render
     highScoreVal.textContent = state.highScore;
     if (hudNameVal) hudNameVal.textContent = state.playerName;
     render();
+}
+
+function returnToMain() {
+    // Stop game if playing
+    if (state.isPlaying) {
+        state.isPlaying = false;
+        cancelAnimationFrame(state.loopId);
+    }
+
+    // Reset game state
+    state.isGameOver = false;
+
+    // Hide all screens except start
+    hud.classList.add('hidden');
+    gameOverScreen.classList.add('hidden');
+    startScreen.classList.remove('hidden');
+
+    // Generate new name for next game
+    state.playerName = generateFunnyName();
+    if (startNameVal) startNameVal.textContent = state.playerName;
+    if (hudNameVal) hudNameVal.textContent = state.playerName;
 }
 
 function resizeCanvas() {
