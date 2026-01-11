@@ -24,6 +24,9 @@ let state = {
     tileCountX: 20,
     tileCountY: 20,
     tileSize: 0,
+    isPlaying: false,
+    isPaused: false,
+    isGameOver: false,
     score: 0,
     gameSpeed: 100, // Default to Beginner
     playerName: '',
@@ -53,6 +56,10 @@ const leaderboardList = document.getElementById('leaderboard-list');
 const difficultyBtns = document.querySelectorAll('.btn-diff');
 const backToMainHud = document.getElementById('back-to-main-hud');
 const backToMainGameOver = document.getElementById('back-to-main-gameover');
+const pauseBtnHud = document.getElementById('pause-btn-hud');
+const pauseScreen = document.getElementById('pause-screen');
+const resumeBtn = document.getElementById('resume-btn');
+const quitBtn = document.getElementById('quit-btn');
 
 // --- Helper Functions ---
 function generateFunnyName() {
@@ -142,6 +149,11 @@ function init() {
         backToMainGameOver.addEventListener('click', returnToMain);
     }
 
+    // Pause Listeners
+    if (pauseBtnHud) pauseBtnHud.addEventListener('click', togglePause);
+    if (resumeBtn) resumeBtn.addEventListener('click', togglePause);
+    if (quitBtn) quitBtn.addEventListener('click', returnToMain);
+
     // Initial Render
     highScoreVal.textContent = state.highScore;
     if (hudNameVal) hudNameVal.textContent = state.playerName;
@@ -150,8 +162,9 @@ function init() {
 
 function returnToMain() {
     // Stop game if playing
-    if (state.isPlaying) {
+    if (state.isPlaying || state.isPaused) {
         state.isPlaying = false;
+        state.isPaused = false;
         cancelAnimationFrame(state.loopId);
     }
 
@@ -160,7 +173,10 @@ function returnToMain() {
 
     // Hide all screens except start
     hud.classList.add('hidden');
+    backToMainHud.classList.add('hidden');
+    pauseBtnHud.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
+    pauseScreen.classList.add('hidden');
     startScreen.classList.remove('hidden');
 
     // Generate new name for next game
@@ -211,6 +227,8 @@ function startGame() {
     startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     hud.classList.remove('hidden');
+    backToMainHud.classList.remove('hidden');
+    pauseBtnHud.classList.remove('hidden');
 
     state.lastTime = performance.now();
     state.loopId = requestAnimationFrame(gameLoop);
@@ -219,6 +237,7 @@ function startGame() {
 function gameOver() {
     state.isPlaying = false;
     state.isGameOver = true;
+    pauseBtnHud.classList.add('hidden');
     cancelAnimationFrame(state.loopId);
 
     // Save Score
@@ -360,9 +379,36 @@ function render() {
 }
 
 // --- Input Handling ---
+function togglePause() {
+    // Only toggle if game is active (playing or already paused)
+    if (!state.isPlaying && !state.isPaused) return;
+
+    state.isPaused = !state.isPaused;
+
+    if (state.isPaused) {
+        state.isPlaying = false;
+        cancelAnimationFrame(state.loopId);
+        pauseScreen.classList.remove('hidden');
+    } else {
+        state.isPlaying = true;
+        pauseScreen.classList.add('hidden');
+        state.lastTime = performance.now();
+        state.loopId = requestAnimationFrame(gameLoop);
+    }
+}
+
 function initInput() {
-    // Keyboard
     document.addEventListener('keydown', e => {
+        if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+            togglePause();
+            return;
+        }
+
+        // Prevent default scrolling for arrow keys
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+            e.preventDefault();
+        }
+
         switch (e.key) {
             case 'ArrowUp': changeDirection(0, -1); break;
             case 'ArrowDown': changeDirection(0, 1); break;
