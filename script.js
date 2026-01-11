@@ -191,7 +191,7 @@ function resizeCanvas() {
 
     // Calculate Grid
     // Use smaller grid width on mobile to make the snake look bigger
-    const gridWidth = window.innerWidth < 600 ? 20 : CONFIG.gridWidth;
+    const gridWidth = window.innerWidth < 600 ? 15 : CONFIG.gridWidth;
     state.tileSize = Math.max(10, Math.floor(canvas.width / gridWidth));
     state.tileCountX = gridWidth;
     state.tileCountY = Math.floor(canvas.height / state.tileSize);

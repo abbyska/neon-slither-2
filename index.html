@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 
 <body>
@@ -18,23 +18,25 @@
 
         <div id="ui-layer">
             <div id="hud" class="hidden">
-                <div class="score-container">
-                    <span class="label">SCORE</span>
-                    <span id="score-value">0</span>
+                <div class="hud-group">
+                    <div class="score-container">
+                        <span class="label">SCORE</span>
+                        <span id="score-value">0</span>
+                    </div>
+                    <div class="score-container">
+                        <span class="label">BEST</span>
+                        <span id="highscore-value">0</span>
+                    </div>
                 </div>
-                <div class="score-container">
-                    <span class="label">BEST</span>
-                    <span id="highscore-value">0</span>
-                </div>
-                <div class="score-container name-badge">
-                    <span class="label">PLAYER</span>
-                    <span id="hud-name">Loading...</span>
-                </div>
-            </div>
 
-            <div class="hud-controls">
-                <button id="pause-btn-hud" class="btn-back hidden">II PAUSE</button>
-                <button id="back-to-main-hud" class="btn-back hidden">↩ MAIN</button>
+                <div class="hud-group">
+                    <div class="score-container name-badge">
+                        <span class="label">PLAYER</span>
+                        <span id="hud-name">Loading...</span>
+                    </div>
+                    <button id="pause-btn-hud" class="btn-back hidden">II PAUSE</button>
+                    <button id="back-to-main-hud" class="btn-back hidden">↩ MAIN</button>
+                </div>
             </div>
 
             <div id="pause-screen" class="screen hidden">
@@ -102,7 +104,7 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js?v=1.1"></script>
 </body>
 
 </html>
