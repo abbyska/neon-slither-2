@@ -552,6 +552,42 @@ h1.title {
     .difficulty-container {
         margin-bottom: 15px;
     }
+
+    /* HUD mobile spacing */
+    #hud {
+        padding: 0 10px;
+        gap: 10px;
+        top: 10px;
+    }
+
+    .hud-controls {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+
+    .btn-back {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    .score-container {
+        padding: 4px 8px;
+        min-width: 50px;
+    }
+
+    .score-container .label {
+        font-size: 0.5rem;
+    }
+
+    .score-container span[id$="-value"] {
+        font-size: 0.9rem;
+    }
+
+    .name-badge {
+        display: none;
+        /* Hide player name in HUD on mobile to save space and prevent overlap */
+    }
 }
 
 /* Landscape / Short Screen Adjustments */
