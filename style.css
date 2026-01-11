@@ -13,6 +13,12 @@
     --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.1);
     --font-main: 'Outfit', sans-serif;
+    /* Lego Colors */
+    --lego-red: #e3000b;
+    --lego-yellow: #ffd500;
+    --lego-blue: #0055bf;
+    --lego-green: #237841;
+    --lego-bg: #4b6584;
 }
 
 * {
@@ -21,9 +27,54 @@
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
-    touch-action: none;
     /* Prevent default touch actions like scroll */
 }
+
+/* LEGO Theme Overrides */
+.theme-lego {
+    --bg-color: var(--lego-bg);
+    --primary-neon: var(--lego-red);
+    --secondary-neon: var(--lego-yellow);
+    --accent-neon: var(--lego-blue);
+    --grid-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-lego canvas {
+    background: radial-gradient(circle at center, #576574 0%, #222f3e 100%);
+}
+
+.theme-lego h1.title {
+    text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+    animation: none;
+}
+
+.theme-lego .btn-neon,
+.theme-lego .btn-diff,
+.theme-lego .btn-theme,
+.theme-lego .score-container,
+.theme-lego .identity-box,
+.theme-lego .controls-container,
+.theme-lego .btn-back {
+    border-radius: 4px !important;
+    border: 3px solid #000 !important;
+    box-shadow: 4px 4px 0 #000 !important;
+}
+
+.theme-lego .btn-neon:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000 !important;
+}
+
+.theme-lego .btn-neon:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0 #000 !important;
+}
+
 
 body {
     background-color: var(--bg-color);
@@ -246,6 +297,45 @@ h1.title {
 }
 
 /* Difficulty Selector */
+/* Theme Selector */
+.theme-container {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-theme {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    pointer-events: auto;
+}
+
+.btn-theme:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-theme.active {
+    background: var(--primary-neon);
+    border-color: var(--primary-neon);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-neon);
+}
+
 .difficulty-container {
     text-align: center;
     margin-bottom: 2rem;

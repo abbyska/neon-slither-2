@@ -7,10 +7,16 @@ const CONFIG = {
     gridWidth: 40, // Number of tiles horizontally
     gameSpeed: 100, // ms per move (lower = faster)
     colors: {
-        snakeHead: '#00ff9d',
-        snakeBody: '#00ccff',
-        food: '#ff00ff',
-        wall: '#ff3333'
+        neon: {
+            snakeHead: '#00ff9d',
+            snakeBody: '#00ccff',
+            food: '#ff00ff'
+        },
+        lego: {
+            snakeHead: '#e3000b', // Lego Red
+            snakeBody: '#ffd500', // Lego Yellow
+            food: '#0055bf'      // Lego Blue
+        }
     },
     // Random Name Generator Data
     adjectives: ['Neon', 'Glowing', 'Cyber', 'Pixel', 'Electric', 'Hyper', 'Glitchy', 'Quantum', 'Laser', 'Retro', 'Turbo', 'Mega'],
@@ -37,7 +43,8 @@ let state = {
     snake: [],
     velocity: { x: 0, y: 0 },
     food: { x: 0, y: 0 },
-    nextDirection: { x: 0, y: 0 } // Buffer input to prevent self-collision on rapid turns
+    nextDirection: { x: 0, y: 0 },
+    theme: 'neon'
 };
 
 // --- DOM Elements ---
@@ -60,6 +67,7 @@ const pauseBtnHud = document.getElementById('pause-btn-hud');
 const pauseScreen = document.getElementById('pause-screen');
 const resumeBtn = document.getElementById('resume-btn');
 const quitBtn = document.getElementById('quit-btn');
+const themeBtns = document.querySelectorAll('.btn-theme');
 
 // --- Helper Functions ---
 function generateFunnyName() {
@@ -131,6 +139,24 @@ function init() {
 
             // State Update
             state.gameSpeed = parseInt(btn.dataset.speed);
+        });
+    });
+
+    // Theme Listeners
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.theme = btn.dataset.theme;
+
+            // Toggle class on body for CSS changes
+            if (state.theme === 'lego') {
+                document.body.classList.add('theme-lego');
+            } else {
+                document.body.classList.remove('theme-lego');
+            }
+            render();
         });
     });
 
@@ -330,33 +356,18 @@ function placeFood() {
 // --- Rendering ---
 function render() {
     // Clear Canvas
-    ctx.fillStyle = '#050510'; // Match CSS bg
+    if (state.theme === 'neon') {
+        ctx.fillStyle = '#050510';
+    } else {
+        ctx.fillStyle = '#4b6584'; // Match lego bg
+    }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw Grid (Optional, low opacity)
-    /*
-    ctx.strokeStyle = 'rgba(26, 26, 46, 0.5)';
-    ctx.lineWidth = 1;
-    for(let i=0; i<=state.tileCountX; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * state.tileSize, 0);
-        ctx.lineTo(i * state.tileSize, state.tileCountY * state.tileSize);
-        ctx.stroke();
-    }
-    for(let i=0; i<=state.tileCountY; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, i * state.tileSize);
-        ctx.lineTo(state.tileCountX * state.tileSize, i * state.tileSize);
-        ctx.stroke();
-    }
-    */
-
-    // Helper for glowing rects
+    // --- Draw Helpers ---
     function drawGlowRect(x, y, color, shadowBlur) {
         ctx.shadowBlur = shadowBlur;
         ctx.shadowColor = color;
         ctx.fillStyle = color;
-        // Add a small padding for 'cell' look
         const padding = 1;
         ctx.fillRect(
             x * state.tileSize + padding,
@@ -364,18 +375,71 @@ function render() {
             state.tileSize - 2 * padding,
             state.tileSize - 2 * padding
         );
-        ctx.shadowBlur = 0; // Reset
+        ctx.shadowBlur = 0;
     }
 
+    function drawLegoBrick(x, y, color) {
+        const padding = 1;
+        const size = state.tileSize - 2 * padding;
+        const px = x * state.tileSize + padding;
+        const py = y * state.tileSize + padding;
+
+        // Main Brick
+        ctx.fillStyle = color;
+        ctx.fillRect(px, py, size, size);
+
+        // Highlight/Shadow lines
+        ctx.lineWidth = Math.max(1, size / 10);
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.strokeRect(px + ctx.lineWidth / 2, py + ctx.lineWidth / 2, size - ctx.lineWidth, size - ctx.lineWidth);
+
+        ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+        ctx.strokeRect(px + ctx.lineWidth, py + ctx.lineWidth, size - 2 * ctx.lineWidth, size - 2 * ctx.lineWidth);
+
+        // Central Stud
+        const studRadius = size * 0.25;
+        const centerX = px + size / 2;
+        const centerY = py + size / 2;
+
+        ctx.beginPath();
+        ctx.arc(centerX + 1, centerY + 1, studRadius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, studRadius, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        // Stud Detail (LEGO text circle)
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, studRadius * 0.7, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // --- Render Objects ---
+    const themeColors = CONFIG.colors[state.theme];
+
     // Draw Food
-    drawGlowRect(state.food.x, state.food.y, CONFIG.colors.food, 20);
+    if (state.theme === 'neon') {
+        drawGlowRect(state.food.x, state.food.y, themeColors.food, 20);
+    } else {
+        drawLegoBrick(state.food.x, state.food.y, themeColors.food);
+    }
 
     // Draw Snake
     state.snake.forEach((part, index) => {
         const isHead = index === 0;
-        const color = isHead ? CONFIG.colors.snakeHead : CONFIG.colors.snakeBody;
-        const blur = isHead ? 20 : 10;
-        drawGlowRect(part.x, part.y, color, blur);
+        const color = isHead ? themeColors.snakeHead : themeColors.snakeBody;
+
+        if (state.theme === 'neon') {
+            const blur = isHead ? 20 : 10;
+            drawGlowRect(part.x, part.y, color, blur);
+        } else {
+            drawLegoBrick(part.x, part.y, color);
+        }
     });
 }
 
