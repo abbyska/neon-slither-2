@@ -110,6 +110,7 @@ function init() {
     initInput();
 
     // UI Listeners
+    startScreen.addEventListener('click', startGame);
     restartBtn.addEventListener('click', startGame);
 
     // Initial Render
