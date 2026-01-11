@@ -25,6 +25,7 @@ let state = {
     tileCountY: 20,
     tileSize: 0,
     score: 0,
+    gameSpeed: 150, // Default to Beginner
     playerName: '',
     leaderboard: [],
     highScore: 0, // Will load from leaderboard
@@ -49,6 +50,7 @@ const restartBtn = document.getElementById('restart-btn');
 const startNameVal = document.getElementById('start-name');
 const hudNameVal = document.getElementById('hud-name');
 const leaderboardList = document.getElementById('leaderboard-list');
+const difficultyBtns = document.querySelectorAll('.btn-diff');
 
 // --- Helper Functions ---
 function generateFunnyName() {
@@ -108,6 +110,20 @@ function init() {
 
     // Input Listeners
     initInput();
+
+    // Difficulty Listeners
+    difficultyBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // prevent triggering start game
+
+            // Visual Update
+            difficultyBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // State Update
+            state.gameSpeed = parseInt(btn.dataset.speed);
+        });
+    });
 
     // UI Listeners
     startScreen.addEventListener('click', startGame);
@@ -192,7 +208,7 @@ function gameLoop(timestamp) {
 
     const deltaTime = timestamp - state.lastTime;
 
-    if (deltaTime >= CONFIG.gameSpeed) {
+    if (deltaTime >= state.gameSpeed) {
         update();
         state.lastTime = timestamp;
     }

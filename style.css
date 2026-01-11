@@ -235,6 +235,51 @@ h1.title {
     text-shadow: 0 0 10px var(--accent-neon);
 }
 
+/* Difficulty Selector */
+.difficulty-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.difficulty-container .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-diff {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    padding: 8px 15px;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-diff.active {
+    background: rgba(0, 255, 157, 0.1);
+    border-color: var(--primary-neon);
+    color: var(--primary-neon);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+.btn-diff:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
 /* HUD Name Badge */
 .name-badge {
     border-color: var(--accent-neon) !important;
